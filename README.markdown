@@ -36,9 +36,15 @@ There are a few rotators that come with this, and I hope to add more. You can ad
 #### JwmRotator::Rotators::NumberOfFiles
 
 This method discards files when the total amount of backups is over a certain limit. It's options are:
-- abs_root_path: the path that relative_backup_path is relative to (commonly, you'll use `File.expand_path(__FILE__)` so that it's relative to the calling file)
-- relative_backup_path: the path to put the backups
-- limit: the number of backups to keep (must be an integer >= 0)
+
+- **abs_root_path** _(directory path, default: .)_
+  The path that relative_backup_path is relative to (commonly, you'll use `File.expand_path(__FILE__)` so that it's relative to the calling file)
+
+- **relative_backup_path** _(directory path, default: .)_
+  The path to put the backups
+
+- **limit** _(Integer, default: 0)_
+  The number of backups to keep (must be an integer >= 0)
 
 
 #### JwmRotator::Rotators::Age
@@ -53,6 +59,8 @@ This method discards files when the total amount of backups is over a certain li
 
 Dependencies
 ------------
+
+None. It's just ruby core and ruby stdlib!
 
 
 History
