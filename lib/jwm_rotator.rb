@@ -11,12 +11,11 @@ require_relative 'jwm_rotator/rotators/size'
 #
 #     options_hash = {
 #       rotator: 'NumberOfFiles',
-#       relative_backup_path: 'backups2/',
+#       backup_path: 'backups',
 #       limit: 3,
-#       abs_root_path: File.expand_path(__FILE__),
 #     }
 #
-#     JwmRotator.rotate('magento.csv', options_hash)
+#     JwmRotator.rotate('a_file.txt', options_hash)
 #
 
 

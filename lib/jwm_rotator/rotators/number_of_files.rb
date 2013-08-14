@@ -1,5 +1,6 @@
 require 'date'
 require 'fileutils'
+require 'pathname'
 
 module JwmRotator
 
@@ -8,11 +9,12 @@ module JwmRotator
     class NumberOfFiles
 
 
-      def initialize(relative_file_path, opts = {})
+      def initialize(source_file_path, opts = {})
         @timestamp = DateTime.now.strftime("%Y%m%d.%H%M%S")
-        @original_file_path = File.expand_path(File.join(opts[:abs_root_path], '..', relative_file_path))
-        @new_path = File.expand_path(File.join(opts[:abs_root_path], '..', opts[:relative_backup_path]))
-        @new_name = "#{File.basename(relative_file_path)}.#{@timestamp}"
+        @original_file_path = Pathname.new(source_file_path).realpath
+        @new_path = Pathname.new(opts[:backup_path]).realpath
+        #NOTE: backup_path must already exist! Not sure how to fix this so it can make it if missing?
+        @new_name = "#{File.basename(source_file_path)}.#{@timestamp}"
         @new_file_path = File.join(@new_path, @new_name)
         @limit = opts[:limit]
       end
