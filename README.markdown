@@ -5,9 +5,9 @@ Rotate backup files based on certain criteria.
 
 Manual
 ------
-First, I want to be clear: If you're on a unix-like system, you should probably use `logrotate` instead. It's good unix-y software that was designed for this type of thing by people much wiser than me, and it's either pre-installed or readily available. The only thing it's not really available for is Windows, which is what I was using when I wrote this.
+First, I want to be clear: If you're on a unix-like system, you should probably use `logrotate` instead. It's good unix-y software that was designed for this type of thing by people much wiser than me, and it's either pre-installed or readily available. The only thing it's not really available for is Windows, which is what I was using when I wrote this. I suppose if you want a pure Ruby file rotator, that's the other time this is a good choice.
 
-(insert more description here...)
+Unlike many log rotators, these rotators only consider external features, like age and size of the file. This means it works just fine with any file type, even binaries. (That said, you could easily add your own rotator that does parse the file contents, if you so choose.)
 
 Arguments:
 - **path** _(String)_  
@@ -22,33 +22,28 @@ require_relative 'lib/jwm_rotator'
 
 options_hash = {
   rotator: 'NumberOfFiles',
-  relative_backup_path: 'my_backup_dir/',
+  backup_path: 'my_backup_dir/',
   limit: 3,
-  abs_root_path: File.expand_path(__FILE__),
 }
 
 JwmRotator.rotate('some_file.txt', options_hash)
 ```
 
-This example uses the NumberOfFiles rotation method that only allows a certain number of backups and discards older ones to make room for newer ones. That certain number of files is set with `limit` so in this case it's 3. The paths to both `my_backup_dir/` and `some_file.txt` are relative to `abs_root_path`, which in this case was set to the path of whatever file this code is in.
+This example uses the NumberOfFiles rotation method that only allows a certain number of backups and discards older ones to make room for newer ones. That certain number of files is set with `limit` so in this case it's 3.
 
 
 Rotators
 --------
 
-There are a few rotators that come with this, and I hope to add more. You can add your own by class to the `Rotators` module inside the `JwmRotator` module, so that it's named like so: `JwmRotator::Rotators::YourOwnCustomRotatorName`
+There are a few rotators that come with this, and I hope to add more. You can add your own by adding a class to the `Rotators` module inside the `JwmRotator` module, so that it's named like so: `JwmRotator::Rotators::YourOwnCustomRotatorName`. (Rotators must accept two arguments, a path and a hash, and they must respond to `#rotate`, but other than that, the rotator can do whatever it wants.)
 
 
 ### JwmRotator::Rotators::NumberOfFiles
 
 This method discards files when the total amount of backups is over a certain limit. It's options are:
 
-- **abs_root_path** _(String, default: '.')_  
-  The path that `relative_backup_path` is relative to  
-  (commonly, you'll use `File.expand_path(__FILE__)` so that it's relative to the calling file)
-
-- **relative_backup_path** _(String, default: '.')_  
-  The path to put the backups, relative to `abs_root_path`
+- **backup_path** _(String, default: '.')_  
+  The path to put the backups
 
 - **limit** _(Integer >= 0, default: 1)_  
   The number of backups to keep
